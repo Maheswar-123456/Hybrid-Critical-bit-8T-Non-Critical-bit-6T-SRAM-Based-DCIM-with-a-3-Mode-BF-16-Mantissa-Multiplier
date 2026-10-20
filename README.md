@@ -1,0 +1,2 @@
+# Hybrid-Critical-bit-8T-Non-Critical-bit-6T-SRAM-Based-DCIM-with-a-3-Mode-BF-16-Mantissa-Multiplier
+Hybrid 8T/6T SRAM-based (DCIM) architecture featuring significance-aware BF16 bit storage and a configurable 8×8, 6×6, and 4×4 mantissa multiplier. Implemented in Verilog HDL with RTL functional verification, Cadence Genus synthesis, Innovus physical implementation through routing, and transistor-level SRAM design and simulation using Virtuoso.

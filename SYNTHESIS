@@ -1,0 +1,79 @@
+CONSRAINTS.SDC
+create_clock -name clk -period 7 -waveform {0 3} [get_ports "clk"]
+set_clock_transition -rise 0.8 [get_clocks "clk"]
+set_clock_transition -fall 0.8 [get_clocks "clk"]
+set_clock_uncertainty 0.01 [get_clocks "clk"]
+set_input_delay -max 1.0 [get_ports "reset_n"] -clock [get_clocks "clk"]
+set_output_delay -max 1.0 [get_ports "{read_data[*]}"] -clock [get_clocks "clk"]
+
+
+TOOL.SDC
+
+
+# ####################################################################
+
+#  Created by Genus(TM) Synthesis Solution 21.14-s082_1 on Thu Jul 23 13:31:33 IST 2026
+
+# ####################################################################
+
+set sdc_version 2.0
+
+set_units -capacitance 1000fF
+set_units -time 1000ps
+
+# Set the current design
+current_design hybrid_bf16_dcim_macro
+
+create_clock -name "clk" -period 7.0 -waveform {0.0 3.0} [get_ports clk]
+set_clock_transition 0.8 [get_clocks clk]
+set_clock_gating_check -setup 0.0 
+set_input_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports reset_n]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[15]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[14]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[13]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[12]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[11]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[10]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[9]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[8]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[7]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[6]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[5]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[4]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[3]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[2]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[1]}]
+set_output_delay -clock [get_clocks clk] -add_delay -max 1.0 [get_ports {read_data[0]}]
+set_wire_load_mode "enclosed"
+set_clock_uncertainty -setup 0.01 [get_clocks clk]
+set_clock_uncertainty -hold 0.01 [get_clocks clk]
+
+RUN.TCL
+
+
+set_attribute init_lib_search_path /home/install/FOUNDRY/digital/90nm/dig/lib
+set_attribute library slow.lib
+
+read_hdl ./hybrid_bf16.v
+
+elaborate hybrid_bf16_dcim_macro
+
+read_sdc ./constraints.sdc
+
+set_attribute syn_generic_effort medium
+set_attribute syn_map_effort medium
+set_attribute syn_opt_effort medium
+
+syn_generic
+syn_map
+syn_opt
+
+write_hdl > hybrid_bf16_netlist.v
+write_sdc > hybrid_bf16.v_tool.sdc
+
+gui_show
+
+report_timing > hybrid_bf16_timing.rpt
+report_power >hybrid_bf16_power.rpt
+report_area > hybrid_bf16_cell.rpt
+report_timing > hybrid_bf16_gates.rpt
